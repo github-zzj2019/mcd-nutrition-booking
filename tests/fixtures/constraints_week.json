@@ -1,0 +1,19 @@
+{
+  "_note": "Multi-day scenario: every weekday lunch should stay under 700 kcal and 800 mg sodium, and no dish should repeat across days. Used with menus_by_date.json (store 1950121, 2026-10-12 / 10-13 / 10-14).",
+  "_expected": "钠 <= 800 mg 在麦当劳是相当紧的约束（单份主餐常达每日上限的 40%-70%），因此该目标下的可行域很窄：实测只有 麦香鸡(731mg)、麦香鱼(556mg)、培根蔬萃双层牛堡(728mg) 三项能同时满足能量与钠，正好够安排三天不重样。",
+  "city": "北京",
+  "keyword": "朝阳区",
+  "storeCode": "1950121",
+  "storeName": "麦当劳北京朝外餐厅",
+  "slotName": "午餐",
+  "people": [
+    {
+      "name": "我",
+      "goals": {
+        "energy": {"op": "max", "value": 700},
+        "sodium": {"op": "max", "value": 800}
+      }
+    }
+  ],
+  "budget": null
+}

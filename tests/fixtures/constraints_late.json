@@ -1,0 +1,17 @@
+{
+  "_note": "Late-night scenario for cross-store arbitration: 2026-10-12 22:30, one person, energy<=700 kcal and sodium<=900 mg.",
+  "_caveat": "menus_by_store.json 里的 menu 是 12:00 午餐菜单，用作 22:30 场景的近似。本场景要证明的结论——「22:30 只有东大桥店可约」——只依赖各店的 segments（东大桥有宵夜 22:14-22:46，朝外没有），与 menu 内容无关。生产环境下 agent 会用 reservationDate=2026-10-12 22:30 重新调用 query-meals 取该时段的真实菜单。",
+  "targetTime": "2026-10-12 22:30",
+  "city": "北京",
+  "keyword": "朝阳区",
+  "people": [
+    {
+      "name": "我",
+      "goals": {
+        "energy": {"op": "max", "value": 700},
+        "sodium": {"op": "max", "value": 900}
+      }
+    }
+  ],
+  "budget": null
+}

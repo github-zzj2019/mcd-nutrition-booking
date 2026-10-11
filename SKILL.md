@@ -59,6 +59,18 @@ Call `mcp__mcd-mcp__query-nearby-stores` with `beType=1`, `searchType=2`, `city`
 - Run `scripts/resolve_store.py` to parse `reservationTimeOptions` into structured meal segments (e.g. `早餐 06:14–10:15`) and match the target time to a segment.
 - If the target time falls in a segment gap (~29 min kitchen switching window), tell the user and suggest the nearest slot.
 
+**Deadline awareness (measured, do not skip).** The API never returns segments
+that have already ended — today's list is simply *shorter*. So "breakfast is
+gone" cannot be read off today's payload alone. Run `scripts/time_guard.py` to:
+
+- classify each segment as 已结束 / 可约中 / 未开始 with minutes remaining;
+- difference today's segments against another day's and surface what is gone
+  today but bookable tomorrow (e.g. 早餐 at 12:39);
+- flag a target clock time that has already elapsed today, rather than
+  misreporting it as "outside business hours".
+
+Use it whenever the user says 「现在 / 马上 / 今天」 or picks an early slot.
+
 ### Step 3 — Pull the real-time menu for the target slot
 
 Call `mcp__mcd-mcp__query-meals` with `storeCode`, `orderType=1`, `beType=1`, and `reservationDate="yyyy-MM-dd HH:mm"` (the chosen slot's time).
@@ -136,6 +148,60 @@ Card rules that must hold:
 
 **Never call `create-order` unless the user explicitly confirms the exact plan.** On confirmation, call `mcp__mcd-mcp__create-order` with the resolved store, slot, items and coupon.
 
+## Advanced capabilities
+
+Four extras that all hinge on the same time<->nutrition coupling. Reach for them
+only when the request calls for it — none of them is part of the default path.
+
+### A. Cross-store arbitration — `scripts/compare_stores.py`
+
+Stores 236 m apart return **different menus and different reservable segments**
+for the same slot (measured: 东大桥 has 宵夜 22:14–22:46, 朝外 does not). So the
+store dimension is itself a time constraint: 「晚上 22:30 想吃」 is infeasible at
+the nearest store and feasible one block away.
+
+- `availability()` — which nearby stores still carry a named item. Matching is
+  exact → normalized-exact → prefix (`巨无霸` → `巨无霸三件套`), **never** the
+  reverse substring direction (`薯条` must not match a request for `脆脆薯条`).
+- `compare_stores()` — solve the same goal set at every store; rank by
+  feasibility, then score, then distance.
+
+Be honest in the output: same-block stores share ~95% of the menu, so under a
+loose goal the best dish is usually identical. The real value is *which stores
+are bookable at that time* and *which store still has the item*.
+
+### B. Multi-day scheduling — `scripts/plan_week.py`
+
+**Measurement refuted the obvious premise**: store 1950121 returns an *identical*
+lunch menu on 2026-10-12 and 2026-10-13. A week planner is therefore not built
+on menu drift. It is built on the three variables that genuinely change:
+
+1. reservable segments per date (today has no 早餐, tomorrow does);
+2. campaigns per date (measured 12 / 2 / 1 across three consecutive days);
+3. rotation itself — cross-day de-duplication is a real user requirement.
+
+Solves each day in order while excluding already-used codes, and falls back to a
+repeat **only** when a day would otherwise be empty, flagging it as `repeated`.
+
+### C. Infeasibility diagnosis — `scripts/diagnose.py`
+
+"没有找到方案" is not an answer. When a goal set cannot be fully met, report:
+
+1. **what blocked it** — a counted breakdown (nutrition data missing, energy
+   below the 300 kcal safety floor, energy above the ceiling, sodium severely
+   over, budget exceeded);
+2. **which goal is binding**;
+3. **the cheapest relaxation** — computed exactly, not grid-searched: for goal
+   `k`, scan the candidates satisfying *every other* goal and take the extreme of
+   `k`'s field among them. That value is by construction the tightest target
+   still admitting a solution, e.g. 「蛋白质≥30g 下探到 23g（调整 23.3%）即可完全
+   达标，对应方案是 板烧鸡腿堡」.
+
+### D. Deadline awareness — `scripts/time_guard.py`
+
+See Step 2. Also handles the elapsed-time case and the today-vs-tomorrow
+segment difference.
+
 ## Guardrails
 
 - **Order placement**: only after explicit user confirmation of the final plan. Never auto-order.
@@ -156,6 +222,10 @@ Card rules that must hold:
 - `scripts/apply_benefits.py` — coupon matching by `productCode` + campaign cross-hint.
 - `scripts/render_card.py` — Markdown plan card renderer.
 - `scripts/run_scenario.py` — end-to-end pipeline; accepts `--pin <meal>` for scenario D.
+- `scripts/compare_stores.py` — cross-store arbitration + item availability.
+- `scripts/plan_week.py` — multi-day scheduling with cross-day de-duplication.
+- `scripts/diagnose.py` — infeasibility diagnosis + minimal-relaxation advice.
+- `scripts/time_guard.py` — segment deadline / urgency awareness.
 - `scripts/run_all_checks.py` — runs every verification suite; non-zero on failure.
 - `references/mcp_tools.md` — MCP tool cheat sheet and measured return fields.
 - `references/nutrition_reference.md` — dietary reference intakes used for per-meal targets.

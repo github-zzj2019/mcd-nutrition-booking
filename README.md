@@ -48,6 +48,67 @@
 
 ---
 
+## 🔬 进阶功能：把「时间」这条约束用到底
+
+四个进阶能力同样全部来自实测，而且各自都推翻或坐实了一个直觉假设。
+
+### ① 多门店择优——「门店」本身就是一个时间约束
+
+相距仅 **236 m** 的朝外店与东大桥店，同一日期、同一时段返回**不同的菜单**，更关键的是**可预约餐段不同**：东大桥有「宵夜(22:14–22:46)」，朝外没有。
+
+于是「晚上 22:30 想约一顿」在最近的店**无解**，走一个街区才有解：
+
+| 门店 | 距离 | 22:30 是否可约 | 原因 |
+|---|---|---|---|
+| 麦当劳北京东大桥餐厅 | 462 m | ✅ 宵夜(22:14–22:46) | 有宵夜餐段 |
+| 麦当劳北京朝外餐厅 | **226 m** | ❌ | 该店最晚到 21:45 |
+
+菜单也有真实差异，且差异项恰好被官方营养表精确收录：东大桥独有「脆脆薯条」，朝外独有「抹茶/咖啡阿芙佳朵」「浓缩咖啡」。所以「附近哪家店还能点到 X」是一个真问题。
+
+> 诚实说明：同商圈门店菜单重合度约 95%，宽松目标下各家最优餐品通常相同。门店择优的真实价值在**该时间哪家可约**与**某款餐品哪家还有**，这一点代码和文案里都写明了，不夸大。
+
+### ② 时间紧迫度——「今天」和「明天」的可约餐段并不一样
+
+实测发现：**接口不会返回已经结束的餐段**——今天（12:39）的返回列表里直接不含早餐。所以「今天约不到早餐了」这件事，只看今天的返回是看不出来的，必须与另一天做差集才能发现：
+
+| 日期 | 可预约餐段 |
+|---|---|
+| 2026-10-11（今天 12:39） | 午餐、下午茶、夜市 |
+| 2026-10-12（明天） | **早餐**、午餐、下午茶、夜市 |
+
+用户说「现在想吃个麦满分」，必须被告知：**今天已经约不到早餐，明天 06:14 起才可以。**
+
+### ③ 多日排程——先推翻一个直觉
+
+直觉是「菜单每天都在变，所以周计划才有意义」。**实测推翻了它**：同一门店 2026-10-12 与 2026-10-13 的午餐菜单**完全一致**（逐分类比对，条目数与编码均相同）。
+
+所以周计划不建在菜单漂移上，而建在三个真实变量上：**每天的可约餐段**、**当天的活动数**（实测连续三天为 12 / 2 / 1 个）、**跨天不重样本身**。
+
+| 日期 | 推荐组合 | 能量 | 蛋白 | 钠 | 价格 | 当天活动 | 重样 |
+|---|---|---|---|---|---|---|---|
+| 10-12 | 麦香鸡 | 369 kcal | 15 g | 731 mg | ¥17 | 2 个 | 否 |
+| 10-13 | 麦香鱼 | 325 kcal | 16 g | 556 mg | ¥23 | 1 个 | 否 |
+| 10-14 | 培根蔬萃双层牛堡 | 442 kcal | 24 g | 728 mg | ¥25 | 0 个 | 否 |
+
+三天三款不重样、每天钠都 ≤ 800 mg。注意「钠 ≤ 800 mg」在麦当劳是相当紧的约束，可行域只有三项——**窄到刚好够排三天**。
+
+### ④ 无解诊断——「没有找到方案」不是答案
+
+目标无解时，回答三个问题：**什么挡住了 / 卡在哪个约束 / 放宽到多少就有解**。放宽量是**精确计算**而非网格搜索：对目标 `k`，只扫描满足其余全部目标的候选，取 `k` 字段的极值——这个值按构造就是仍有解的最紧目标。
+
+实测「能量 ≤ 400 kcal 且 蛋白 ≥ 30 g」：
+
+| 约束 | 你的要求 | 放宽到 | 调整幅度 | 对应方案 |
+|---|---|---|---|---|
+| 蛋白质 | ≥ 30 g | **23 g** | 23.3% | 板烧鸡腿堡 ¥23.5 |
+| 能量 | ≤ 400 kcal | — | — | 即使完全放开，其余目标仍无法同时成立 |
+
+> 💡 卡住的是「蛋白质 ≥ 30 g」。把这一项下探到 **23 g**（调整 23.3%）即可完全达标，对应方案是**板烧鸡腿堡**。
+
+完整卡片见 [`tests/output/advanced_E*.md`](tests/output/)。
+
+---
+
 ## 🎯 实测演示：一句话，反推出「该约几点」
 
 输入：
@@ -107,6 +168,21 @@
 **场景 D｜已有偏好，求优化**
 > 我平时都点巨无霸三件套，有没有更均衡的替换方案
 
+**场景 E1｜现在还来得及吗**（进阶④）
+> 现在想吃个麦满分，还来得及吗？
+
+**场景 E2｜换个时间，换家店**（进阶①）
+> 明天晚上 22:30 想吃点东西，控制在 700 kcal 以内
+
+**场景 E3｜附近哪家还有这一款**（进阶①）
+> 我想吃脆脆薯条，附近哪家店还有？
+
+**场景 E4｜目标太苛刻时**（进阶③）
+> 我想控制在 400 kcal 以内，但蛋白质要 30g 以上
+
+**场景 E5｜连续几天不重样**（进阶②）
+> 接下来三天午饭帮我排一下，每天钠别超过 800 毫克，别重样
+
 ---
 
 ## 📁 目录结构
@@ -123,6 +199,10 @@ mcd-nutrition-booking/
 │   ├── optimize_replacements.py  # ⑤c 基于 query-meal-detail 的替换优化
 │   ├── apply_benefits.py         # ⑥ 券（按 productCode 匹配）+ 活动交叉提示
 │   ├── render_card.py            # ⑦ 方案卡片渲染（Markdown）
+│   ├── compare_stores.py         # 进阶① 多门店择优 + 餐品可得性
+│   ├── plan_week.py              # 进阶② 多日排程（跨天不重样）
+│   ├── diagnose.py               # 进阶③ 无解诊断 + 最小放宽建议
+│   ├── time_guard.py             # 进阶④ 餐段截止 / 紧迫度感知
 │   ├── run_scenario.py           # 端到端：一句话 → 一张卡
 │   └── run_all_checks.py         # 一键跑全部验证（可作为 CI 门禁）
 ├── references/
@@ -130,7 +210,7 @@ mcd-nutrition-booking/
 │   └── nutrition_reference.md    # 膳食参考摄入量（每餐目标换算）
 ├── tests/
 │   ├── fixtures/                 # 真实 MCP 返回夹具（营养表/门店/菜单/拆解/券/活动）
-│   └── output/                   # 四个场景的演示卡片
+│   └── output/                   # 场景 A–D 与进阶 E1–E5 的演示卡片
 ├── docs/
 │   └── PROPOSAL.md               # 立项方案
 ├── README.md                     # 参赛必需
@@ -145,7 +225,34 @@ mcd-nutrition-booking/
 仓库里固化了**真实 MCP 返回**作为测试夹具，无需 Token 即可复现全部结果：
 
 ```bash
-python scripts/run_all_checks.py                 # 数据层 / 求解器 / 杀手功能 / 边界，共 4 组
+python scripts/run_all_checks.py                 # 数据层 / 求解器 / 杀手功能 / 边界 / 进阶，共 5 组
+
+# 进阶①：22:30 哪家店还能约
+python scripts/compare_stores.py \
+  --store-menus tests/fixtures/menus_by_store.json \
+  --nutrition   tests/fixtures/nutrition_raw.txt \
+  --details     tests/fixtures/details_sample.json \
+  --constraints tests/fixtures/constraints_late.json \
+  --time "2026-10-12 22:30" --markdown
+
+# 进阶②：三天不重样排程
+python scripts/plan_week.py \
+  --date-menus  tests/fixtures/menus_by_date.json \
+  --nutrition   tests/fixtures/nutrition_raw.txt \
+  --details     tests/fixtures/details_sample.json \
+  --constraints tests/fixtures/constraints_week.json --markdown
+
+# 进阶③：无解诊断与最小放宽
+python scripts/diagnose.py \
+  --menu        tests/fixtures/menu_lunch_sample.json \
+  --nutrition   tests/fixtures/nutrition_raw.txt \
+  --details     tests/fixtures/details_sample.json \
+  --constraints tests/fixtures/constraints_tight.json --markdown
+
+# 进阶④：现在还能约哪个餐段
+python scripts/time_guard.py \
+  --stores tests/fixtures/stores.json \
+  --now "2026-10-11 12:39" --date 2026-10-11
 
 python scripts/run_scenario.py \
   --text "我想吃够25g蛋白又不想超过600 kcal，钠也别超过800毫克，帮我看看明天约几点合适" \

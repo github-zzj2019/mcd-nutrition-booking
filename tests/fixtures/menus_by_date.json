@@ -1,0 +1,153 @@
+{
+  "_meta": {
+    "provenance": "REAL mcp__mcd-mcp__query-meals responses for store 1950121, orderType=1 beType=1, 午餐 12:00. Captured 2026-10-11 12:39–12:42.",
+    "KEY_FINDING": "同一门店相邻两天（2026-10-12 vs 2026-10-13）的午餐菜单**完全一致**——逐分类比对（麦咖啡™、炸鸡、小食甜品、500大卡套餐、开心乐园）条目数与编码均相同。这推翻了「菜单每天不同」的直觉假设。",
+    "therefore": "多日排程的差异化不能建立在『菜单每天不同』上，而必须建立在另外三个真实变量上：① 每天的**可预约餐段**不同（实测：2026-10-11 当天已无早餐段，2026-10-12 才有）；② 每天的**活动数量**不同（实测 10-11 共 12 个 / 10-12 共 2 个 / 10-13 共 1 个）；③ 跨天**不重样轮换**本身是用户的真实诉求。",
+    "trimRule": "与 menus_by_store.json 相同的裁剪规则。",
+    "menuSourceNote": "2026-10-14 条目未单独实测，其 menu 沿用已实测且与 10-13 一致的菜单，并在该条目上标注 menuSource=reused，避免伪造未采集的数据。"
+  },
+  "storeCode": "1950121",
+  "storeName": "麦当劳北京朝外餐厅",
+  "slot": "午餐",
+  "dates": {
+    "2026-10-12": {
+      "menuSource": "measured",
+      "campaignCount": 2,
+      "segments": [
+        {"name": "早餐", "start": "06:14", "end": "10:15"},
+        {"name": "午餐", "start": "10:44", "end": "14:15"},
+        {"name": "下午茶", "start": "14:44", "end": "16:45"},
+        {"name": "夜市", "start": "17:14", "end": "21:45"}
+      ],
+      "menu": {
+        "success": true,
+        "code": 200,
+        "data": {
+          "meals": {
+            "9900005466": {"name": "巨无霸三件套", "currentPrice": "37", "originalPrice": "50.5"},
+            "1100": {"name": "巨无霸", "currentPrice": "26", "originalPrice": "26"},
+            "1440": {"name": "麦辣鸡腿汉堡", "currentPrice": "22.5", "originalPrice": "22.5"},
+            "1406": {"name": "板烧鸡腿堡", "currentPrice": "23.5", "originalPrice": "23.5"},
+            "1600": {"name": "麦香鱼", "currentPrice": "23", "originalPrice": "23"},
+            "1450": {"name": "麦香鸡", "currentPrice": "17", "originalPrice": "17"},
+            "1120": {"name": "双层吉士汉堡", "currentPrice": "23", "originalPrice": "23"},
+            "1106": {"name": "培根蔬萃双层牛堡", "currentPrice": "25", "originalPrice": "25"},
+            "4648": {"name": "不素之霸双层牛堡", "currentPrice": "27", "originalPrice": "27"},
+            "9900003586": {"name": "双层深海鳕鱼堡", "currentPrice": "25", "originalPrice": "25"},
+            "511781": {"name": "培根安格斯厚牛堡", "currentPrice": "34.5", "originalPrice": "34.5"},
+            "511782": {"name": "芝士安格斯厚牛堡", "currentPrice": "31.5", "originalPrice": "31.5"},
+            "521816": {"name": "酥酥多笋卷", "currentPrice": "21", "originalPrice": "21"},
+            "520445": {"name": "薄皮焦香V翅", "currentPrice": "16", "originalPrice": "16"},
+            "521156": {"name": "那么大鸡排（椒盐风味）", "currentPrice": "14", "originalPrice": "14"},
+            "6102": {"name": "苹果片", "currentPrice": "7", "originalPrice": "7"},
+            "3755": {"name": "纯牛奶(盒装)", "currentPrice": "11", "originalPrice": "11"},
+            "3757": {"name": "纯悦", "currentPrice": "7.5", "originalPrice": "7.5"},
+            "6362": {"name": "100% 苹果汁(盒装)", "currentPrice": "12", "originalPrice": "12"},
+            "2430": {"name": "【美汁源】“黄金橙橙”", "currentPrice": "13", "originalPrice": "13"},
+            "3505": {"name": "锡兰红茶", "currentPrice": "11.5", "originalPrice": "11.5"},
+            "514850": {"name": "抹茶阿芙佳朵", "currentPrice": "15", "originalPrice": "15"},
+            "514851": {"name": "咖啡阿芙佳朵", "currentPrice": "15", "originalPrice": "15"},
+            "507389": {"name": "浓缩咖啡", "currentPrice": "15", "originalPrice": "15"},
+            "4810": {"name": "薯条", "currentPrice": "14.5", "originalPrice": "14.5"},
+            "4437": {"name": "玉米杯", "currentPrice": "13", "originalPrice": "13"},
+            "9900008751": {"name": "可乐", "currentPrice": "9.5", "originalPrice": "9.5"},
+            "3010": {"name": "雪碧", "currentPrice": "9.5", "originalPrice": "9.5"}
+          }
+        }
+      }
+    },
+    "2026-10-13": {
+      "menuSource": "measured",
+      "campaignCount": 1,
+      "segments": [
+        {"name": "早餐", "start": "06:14", "end": "10:15"},
+        {"name": "午餐", "start": "10:44", "end": "14:15"},
+        {"name": "下午茶", "start": "14:44", "end": "16:45"},
+        {"name": "夜市", "start": "17:14", "end": "21:45"}
+      ],
+      "menu": {
+        "success": true,
+        "code": 200,
+        "data": {
+          "meals": {
+            "9900005466": {"name": "巨无霸三件套", "currentPrice": "37", "originalPrice": "50.5"},
+            "1100": {"name": "巨无霸", "currentPrice": "26", "originalPrice": "26"},
+            "1440": {"name": "麦辣鸡腿汉堡", "currentPrice": "22.5", "originalPrice": "22.5"},
+            "1406": {"name": "板烧鸡腿堡", "currentPrice": "23.5", "originalPrice": "23.5"},
+            "1600": {"name": "麦香鱼", "currentPrice": "23", "originalPrice": "23"},
+            "1450": {"name": "麦香鸡", "currentPrice": "17", "originalPrice": "17"},
+            "1120": {"name": "双层吉士汉堡", "currentPrice": "23", "originalPrice": "23"},
+            "1106": {"name": "培根蔬萃双层牛堡", "currentPrice": "25", "originalPrice": "25"},
+            "4648": {"name": "不素之霸双层牛堡", "currentPrice": "27", "originalPrice": "27"},
+            "9900003586": {"name": "双层深海鳕鱼堡", "currentPrice": "25", "originalPrice": "25"},
+            "511781": {"name": "培根安格斯厚牛堡", "currentPrice": "34.5", "originalPrice": "34.5"},
+            "511782": {"name": "芝士安格斯厚牛堡", "currentPrice": "31.5", "originalPrice": "31.5"},
+            "521816": {"name": "酥酥多笋卷", "currentPrice": "21", "originalPrice": "21"},
+            "520445": {"name": "薄皮焦香V翅", "currentPrice": "16", "originalPrice": "16"},
+            "521156": {"name": "那么大鸡排（椒盐风味）", "currentPrice": "14", "originalPrice": "14"},
+            "6102": {"name": "苹果片", "currentPrice": "7", "originalPrice": "7"},
+            "3755": {"name": "纯牛奶(盒装)", "currentPrice": "11", "originalPrice": "11"},
+            "3757": {"name": "纯悦", "currentPrice": "7.5", "originalPrice": "7.5"},
+            "6362": {"name": "100% 苹果汁(盒装)", "currentPrice": "12", "originalPrice": "12"},
+            "2430": {"name": "【美汁源】“黄金橙橙”", "currentPrice": "13", "originalPrice": "13"},
+            "3505": {"name": "锡兰红茶", "currentPrice": "11.5", "originalPrice": "11.5"},
+            "514850": {"name": "抹茶阿芙佳朵", "currentPrice": "15", "originalPrice": "15"},
+            "514851": {"name": "咖啡阿芙佳朵", "currentPrice": "15", "originalPrice": "15"},
+            "507389": {"name": "浓缩咖啡", "currentPrice": "15", "originalPrice": "15"},
+            "4810": {"name": "薯条", "currentPrice": "14.5", "originalPrice": "14.5"},
+            "4437": {"name": "玉米杯", "currentPrice": "13", "originalPrice": "13"},
+            "9900008751": {"name": "可乐", "currentPrice": "9.5", "originalPrice": "9.5"},
+            "3010": {"name": "雪碧", "currentPrice": "9.5", "originalPrice": "9.5"}
+          }
+        }
+      }
+    },
+    "2026-10-14": {
+      "menuSource": "reused",
+      "menuSourceNote": "未单独实测；沿用与 2026-10-13 一致的已实测菜单（相邻日期菜单实测无差异）。",
+      "campaignCount": 0,
+      "segments": [
+        {"name": "早餐", "start": "06:14", "end": "10:15"},
+        {"name": "午餐", "start": "10:44", "end": "14:15"},
+        {"name": "下午茶", "start": "14:44", "end": "16:45"},
+        {"name": "夜市", "start": "17:14", "end": "21:45"}
+      ],
+      "menu": {
+        "success": true,
+        "code": 200,
+        "data": {
+          "meals": {
+            "9900005466": {"name": "巨无霸三件套", "currentPrice": "37", "originalPrice": "50.5"},
+            "1100": {"name": "巨无霸", "currentPrice": "26", "originalPrice": "26"},
+            "1440": {"name": "麦辣鸡腿汉堡", "currentPrice": "22.5", "originalPrice": "22.5"},
+            "1406": {"name": "板烧鸡腿堡", "currentPrice": "23.5", "originalPrice": "23.5"},
+            "1600": {"name": "麦香鱼", "currentPrice": "23", "originalPrice": "23"},
+            "1450": {"name": "麦香鸡", "currentPrice": "17", "originalPrice": "17"},
+            "1120": {"name": "双层吉士汉堡", "currentPrice": "23", "originalPrice": "23"},
+            "1106": {"name": "培根蔬萃双层牛堡", "currentPrice": "25", "originalPrice": "25"},
+            "4648": {"name": "不素之霸双层牛堡", "currentPrice": "27", "originalPrice": "27"},
+            "9900003586": {"name": "双层深海鳕鱼堡", "currentPrice": "25", "originalPrice": "25"},
+            "511781": {"name": "培根安格斯厚牛堡", "currentPrice": "34.5", "originalPrice": "34.5"},
+            "511782": {"name": "芝士安格斯厚牛堡", "currentPrice": "31.5", "originalPrice": "31.5"},
+            "521816": {"name": "酥酥多笋卷", "currentPrice": "21", "originalPrice": "21"},
+            "520445": {"name": "薄皮焦香V翅", "currentPrice": "16", "originalPrice": "16"},
+            "521156": {"name": "那么大鸡排（椒盐风味）", "currentPrice": "14", "originalPrice": "14"},
+            "6102": {"name": "苹果片", "currentPrice": "7", "originalPrice": "7"},
+            "3755": {"name": "纯牛奶(盒装)", "currentPrice": "11", "originalPrice": "11"},
+            "3757": {"name": "纯悦", "currentPrice": "7.5", "originalPrice": "7.5"},
+            "6362": {"name": "100% 苹果汁(盒装)", "currentPrice": "12", "originalPrice": "12"},
+            "2430": {"name": "【美汁源】“黄金橙橙”", "currentPrice": "13", "originalPrice": "13"},
+            "3505": {"name": "锡兰红茶", "currentPrice": "11.5", "originalPrice": "11.5"},
+            "514850": {"name": "抹茶阿芙佳朵", "currentPrice": "15", "originalPrice": "15"},
+            "514851": {"name": "咖啡阿芙佳朵", "currentPrice": "15", "originalPrice": "15"},
+            "507389": {"name": "浓缩咖啡", "currentPrice": "15", "originalPrice": "15"},
+            "4810": {"name": "薯条", "currentPrice": "14.5", "originalPrice": "14.5"},
+            "4437": {"name": "玉米杯", "currentPrice": "13", "originalPrice": "13"},
+            "9900008751": {"name": "可乐", "currentPrice": "9.5", "originalPrice": "9.5"},
+            "3010": {"name": "雪碧", "currentPrice": "9.5", "originalPrice": "9.5"}
+          }
+        }
+      }
+    }
+  }
+}

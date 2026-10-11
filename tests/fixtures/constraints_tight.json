@@ -1,0 +1,20 @@
+{
+  "_note": "Deliberately infeasible goal set for the diagnosis module: energy<=400 kcal AND protein>=30 g at the 午餐 segment. No single purchasable unit in the official nutrition table satisfies both — it is the canonical 'user asks for something the menu cannot do' case.",
+  "targetTime": "2026-10-12 12:00",
+  "city": "北京",
+  "keyword": "朝阳区",
+  "storeCode": "1950121",
+  "storeName": "麦当劳北京朝外餐厅",
+  "slotName": "午餐",
+  "slotRange": "(10:44至14:15)",
+  "people": [
+    {
+      "name": "我",
+      "goals": {
+        "energy": {"op": "max", "value": 400},
+        "protein": {"op": "min", "value": 30}
+      }
+    }
+  ],
+  "budget": null
+}

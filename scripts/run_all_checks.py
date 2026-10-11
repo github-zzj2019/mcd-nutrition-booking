@@ -22,6 +22,7 @@ SCRIPTS = [
     ("核心求解器", "verify_solver.py"),
     ("杀手功能", "verify_features.py"),
     ("边界与降级", "verify_edge_cases.py"),
+    ("进阶功能", "verify_advanced.py"),
 ]
 
 
