@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 268" width="680" height="268" role="img" aria-label="三个变量的实测对照：换餐段菜单变、换门店菜单变、换日期菜单不变，据此决定四个进阶功能该建在什么基础上">
+  <defs>
+    <style>
+      .t{font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif}
+      .h{font-size:18px;font-weight:700;fill:#1F2328}
+      .s{font-size:12px;fill:#57606A}
+      .k{font-size:12.5px;font-weight:700}
+      .n{font-size:11px;fill:#57606A}
+      .v{font-size:13px;font-weight:700}
+    </style>
+  </defs>
+
+  <rect width="680" height="268" fill="#FFFFFF"/>
+
+  <text class="t h" x="24" y="28">先做实测，再决定做什么</text>
+  <text class="t s" x="24" y="48">只改一个变量、其余全部固定，看麦当劳 MCP 到底返回什么 —— 结论直接决定功能该建在什么基础上</text>
+
+  <!-- ===== 卡片 1：餐段 ===== -->
+  <rect x="24" y="62" width="201" height="130" rx="8" fill="#FFF3F2" stroke="#DA291C" stroke-width="1.5"/>
+  <text class="t k" x="38" y="83" fill="#B31F16">改变量：餐段（时间）</text>
+  <text class="t v" x="38" y="105" fill="#DA291C">菜单 → 变</text>
+  <text class="t n" x="38" y="124">08:00 返回早餐菜单</text>
+  <text class="t n" x="38" y="139">12:00 返回正餐菜单</text>
+  <text class="t n" x="38" y="154">巨无霸 / 麦满分</text>
+  <text class="t n" x="38" y="169">互不相交</text>
+  <line x1="38" y1="178" x2="211" y2="178" stroke="#E5B3AE" stroke-width="1"/>
+  <text class="t k" x="38" y="192" fill="#B31F16">→ 反向时段推荐</text>
+
+  <!-- ===== 卡片 2：门店 ===== -->
+  <rect x="239" y="62" width="201" height="130" rx="8" fill="#FFF3F2" stroke="#DA291C" stroke-width="1.5"/>
+  <text class="t k" x="253" y="83" fill="#B31F16">改变量：门店</text>
+  <text class="t v" x="253" y="105" fill="#DA291C">菜单 → 变</text>
+  <text class="t n" x="253" y="124">相距 236 m 的两店</text>
+  <text class="t n" x="253" y="139">差异 6 项 vs 11 项</text>
+  <text class="t n" x="253" y="154">更关键：可约餐段不同</text>
+  <text class="t n" x="253" y="169">东大桥有宵夜，朝外无</text>
+  <line x1="253" y1="178" x2="426" y2="178" stroke="#E5B3AE" stroke-width="1"/>
+  <text class="t k" x="253" y="192" fill="#B31F16">→ 多门店择优</text>
+
+  <!-- ===== 卡片 3：日期 ===== -->
+  <rect x="454" y="62" width="201" height="130" rx="8" fill="#F6F8FA" stroke="#8C959F" stroke-width="1.5"/>
+  <text class="t k" x="468" y="83" fill="#1F2328">改变量：日期</text>
+  <text class="t v" x="468" y="105" fill="#57606A">菜单 → 不变</text>
+  <text class="t n" x="468" y="124">10-12 与 10-13</text>
+  <text class="t n" x="468" y="139">逐分类比对</text>
+  <text class="t n" x="468" y="154">条目数与编码</text>
+  <text class="t n" x="468" y="169">完全相同</text>
+  <line x1="468" y1="178" x2="641" y2="178" stroke="#D0D7DE" stroke-width="1"/>
+  <text class="t k" x="468" y="192" fill="#1F2328">→ 周计划换基础</text>
+
+  <!-- ===== 底部结论 ===== -->
+  <rect x="24" y="204" width="631" height="52" rx="8" fill="#FFFBEA" stroke="#E0A800" stroke-width="1.3"/>
+  <text class="t k" x="38" y="224" fill="#5A3E00">推翻的直觉：「菜单每天都在变，所以周计划才有意义」</text>
+  <text class="t n" x="38" y="242">实测证明相邻两天菜单完全一致。多日排程因此不建在菜单漂移上，而建在</text>
+  <text class="t n" x="38" y="253" fill="#B31F16">每天可约餐段 · 当天活动数（12/2/1）· 跨天不重样 这三个真实变量上。</text>
+</svg>

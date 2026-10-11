@@ -49,6 +49,7 @@ from parse_nutrition import (  # noqa: E402
     parse_nutrition_text, build_index, build_fuzzy_index,
 )
 from plan_meal import plan  # noqa: E402
+from render_card import SODIUM_PER_MEAL_REFERENCE  # noqa: E402
 
 WEEKDAY_CN = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
 
@@ -149,10 +150,14 @@ def render_week(result: dict[str, Any]) -> str:
         t = p.get("totals") or {}
         repeat = "⚠️ 是" if d["repeated"] else "否"
         source = "" if d["menuSource"] == "measured" else " *"
+        # Single-plan cards already carry the sodium advisory; a week table
+        # that silently lists 996 / 1044 mg would be inconsistent with them.
+        sodium = float(t.get("sodium", 0))
+        flag = " ⚠️" if sodium > SODIUM_PER_MEAL_REFERENCE else ""
         lines.append(
             f"| {d['date']}{source} | {d['weekday']} | {p.get('mealName', '-')} | "
             f"{float(t.get('energyKcal', 0)):.0f} kcal | {float(t.get('protein', 0)):.0f} g | "
-            f"{float(t.get('sodium', 0)):.0f} mg | ¥{p.get('price', 0):g} | "
+            f"{sodium:.0f} mg{flag} | ¥{p.get('price', 0):g} | "
             f"{d['campaignCount']} 个 | {repeat} |"
         )
     lines.append("")
@@ -170,6 +175,20 @@ def render_week(result: dict[str, Any]) -> str:
         f"日均 {result['avgEnergy']:.0f} kcal、钠 {result['avgSodium']:.0f} mg。"
     )
     lines.append("")
+
+    high = [d for d in result["days"]
+            if d["plan"]
+            and float((d["plan"].get("totals") or {}).get("sodium", 0))
+            > SODIUM_PER_MEAL_REFERENCE]
+    if high:
+        lines.append(
+            f"> 🧂 表中标 ⚠️ 的 {len(high)} 天钠高于每餐参考值"
+            f"（< {SODIUM_PER_MEAL_REFERENCE:.0f} mg，按每日 2000 mg 的 1/3 计），"
+            f"日均 {result['avgSodium']:.0f} mg。麦当劳单品钠普遍偏高，"
+            "这里给出的是**该餐段内的相对更优组合**，不是低钠饮食方案；"
+            "如需进一步控钠，建议减少酱料类餐品或对比其他餐段。"
+        )
+        lines.append("")
 
     if result["repeatDays"]:
         lines.append(

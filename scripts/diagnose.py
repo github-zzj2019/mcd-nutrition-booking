@@ -73,7 +73,7 @@ def _block_reason(c: dict[str, Any], goals: dict[str, dict],
     return None
 
 
-def _all_achieved(totals: dict[str, float], goals: dict[str, dict]) -> bool:
+def all_achieved(totals: dict[str, float], goals: dict[str, dict]) -> bool:
     """True when every goal in ``goals`` is fully achieved (achieved == 1)."""
     for key, (field, default_op) in GOAL_KEYS.items():
         g = goals.get(key)
@@ -87,6 +87,28 @@ def _all_achieved(totals: dict[str, float], goals: dict[str, dict]) -> bool:
         if op == "min" and actual < target - 1e-9:
             return False
     return True
+
+
+def needs_diagnosis(plans: list[dict[str, Any]], goals: dict[str, dict]) -> bool:
+    """Decide whether a diagnosis block should be attached to the card.
+
+    Two cases, not one:
+
+    1. **zero plans** — the obvious one.
+    2. **plans exist but none fully meets the goals** — far more common and
+       far more misleading. The card looks healthy (「方案 1 / 2 / 3」) while
+       the best plan is sitting at 90%. Without a diagnosis the user has no
+       way to tell whether that 90% is a rounding artifact or a hard
+       conflict, and no idea which goal to relax.
+
+    So the trigger is "no plan fully achieves every goal", not "no plan
+    survived the hard filter".
+    """
+    if not goals:
+        return False
+    if not plans:
+        return True
+    return not any(all_achieved(p.get("totals") or {}, goals) for p in plans)
 
 
 def diagnose(menu: dict, nutrition_index: dict, fuzzy_index: dict,
@@ -135,7 +157,7 @@ def diagnose(menu: dict, nutrition_index: dict, fuzzy_index: dict,
     )
     best = scored[0]
 
-    if _all_achieved(best["totals"], goals):
+    if all_achieved(best["totals"], goals):
         result["feasible"] = True
         result["best"] = best
         result["binding"] = []
@@ -158,7 +180,7 @@ def diagnose(menu: dict, nutrition_index: dict, fuzzy_index: dict,
         extreme: float | None = None
         witness: dict | None = None
         for c in admissible:
-            if not _all_achieved(c["totals"], others):
+            if not all_achieved(c["totals"], others):
                 continue
             v = float(c["totals"].get(field) or 0.0)
             if extreme is None or (op == "min" and v > extreme) or (op == "max" and v < extreme):

@@ -159,6 +159,23 @@ def hard_filter(totals: dict[str, float], goals: dict[str, dict]) -> bool:
     return True
 
 
+def fully_achieved(detail: dict[str, Any], goals: dict[str, dict]) -> bool:
+    """True when every goal in ``goals`` is met at 100% by a scored candidate.
+
+    ``detail`` is the per-goal breakdown produced by `score_plan`. This is a
+    different question from `hard_filter`: the hard filter only rejects energy
+    and sodium *extremes*, so a ``protein>=40`` goal leaves every candidate
+    admissible while none of them actually reaches 40 g. Code that infers
+    "the goal is unreachable" from "nothing passed the hard filter" therefore
+    reports success for a goal it never met.
+    """
+    for key in (goals or {}):
+        d = (detail or {}).get(key) or {}
+        if float(d.get("achieved", 0.0)) < 1.0:
+            return False
+    return True
+
+
 # --------------------------------------------------------------------------- #
 # MCP payload extraction
 # --------------------------------------------------------------------------- #
@@ -371,12 +388,17 @@ def plan_group(menu: dict, nutrition_index: dict, fuzzy_index: dict,
             scored.append({**c, "score": sc["score"], "detail": sc["detail"],
                            "goalText": goal_text(goals)})
         if not scored:
-            # No meal satisfies this diner's goals in this slot — relax instead
-            # of failing the whole request, but record it for the card.
+            # Nothing survives the hard constraints for this diner: fall back
+            # to the whole pool instead of failing the entire request.
             relaxed.append(person.get("name", "?"))
             scored = [{**c, "score": score_plan(c["totals"], goals)["score"],
                        "detail": score_plan(c["totals"], goals)["detail"],
                        "goalText": goal_text(goals)} for c in pool]
+        elif goals and not any(fully_achieved(c["detail"], goals) for c in scored):
+            # Everything is admissible but nothing actually reaches the goal.
+            # Without this branch the card showed 小王 at 70% with no hint that
+            # his goal was unmet anywhere in this slot.
+            relaxed.append(person.get("name", "?"))
         scored.sort(key=lambda p: (-p["score"], p["price"]))
         per_person_pool.append(scored[:branch])
 
@@ -446,8 +468,8 @@ def _build_reason(plan: dict[str, Any]) -> str:
 
     if not plan.get("complete"):
         bits.append("（部分餐品暂无官方营养数据，核算不完整）")
-    if plan.get("relaxedFor"):
-        bits.append(f"注意：{ '、'.join(plan['relaxedFor']) } 的目标在该餐段无完全满足的组合，已放宽为相对最优")
+    # relaxedFor is rendered as a prominent callout on the card itself, so
+    # repeating it inside this sentence would just be noise.
 
     tail = "这是该餐段内按每位成员的目标算出的整体更优解。" if plan.get("perPerson") \
         else "这是该餐段内按你的目标算出的相对更优解。"

@@ -91,6 +91,28 @@ NAME_RE = re.compile(
 ASK_TIME_RE = re.compile(r"(几点|什么时候|什么时间|哪个时段|哪个餐段|何时)")
 
 # --------------------------------------------------------------------------- #
+# Intent routing: which solver should handle this request?
+# --------------------------------------------------------------------------- #
+# These two intents select an *advanced* solver instead of the default
+# single-slot one. They are deliberately narrow: a multi-day request must not
+# fire on 「两个同事」and a cross-store request must not fire on 「哪家餐厅」.
+#
+#   连续三天 / 接下来 3 天 / 这周   -> scripts/plan_week.py
+#   哪家店 / 换个店 / 附近门店      -> scripts/compare_stores.py
+
+MULTI_DAY_RE = [
+    re.compile(r"(?:连续|接下来|未来|往后|之后)\s*([0-9一两二三四五六七八九十]+)\s*(?:天|日)"),
+    re.compile(r"([0-9一两二三四五六七八九十]+)\s*(?:天|日)\s*(?:的)?"
+               r"(?:午餐|早餐|晚餐|午饭|晚饭|计划|安排|排程|菜单|餐)"),
+]
+WEEK_RE = re.compile(r"(这周|本周|一周|一星期|这个礼拜|整个星期)")
+
+CROSS_STORE_RE = re.compile(
+    r"(哪家店|哪家门店|哪个店|哪一家|哪店|换个店|换家店|换一家|"
+    r"附近(?:的)?(?:门店|店)|所有门店|各家门店|各个门店|哪(?:里|儿)能(?:约|点))"
+)
+
+# --------------------------------------------------------------------------- #
 # Time parsing
 # --------------------------------------------------------------------------- #
 def _parse_clock(text: str) -> tuple[int, int] | None:
@@ -318,6 +340,46 @@ def _to_int(token: str) -> int:
 
 
 # --------------------------------------------------------------------------- #
+# Plan-mode routing
+# --------------------------------------------------------------------------- #
+def _parse_span_days(text: str) -> int | None:
+    """Return the number of days to schedule, or None for a single-day request."""
+    if WEEK_RE.search(text):
+        # 「这周」按工作日排程；周末门店时段差异大，交给用户明确指定。
+        return 5
+    for pat in MULTI_DAY_RE:
+        m = pat.search(text)
+        if not m:
+            continue
+        n = _to_int(m.group(1))
+        # 1 天不是排程；超过 7 天超出预约可及范围（门店预约时段按日返回）。
+        if 2 <= n <= 7:
+            return n
+    return None
+
+
+def parse_plan_mode(text: str) -> dict[str, Any]:
+    """Classify the request into ``single`` / ``week`` / ``cross_store``.
+
+    Precedence is **week > cross_store > single**: a multi-day request that also
+    mentions stores is still a schedule, not a one-off store comparison.
+
+    Note that a span request usually carries no date word (「接下来三天中午」has
+    no 今天/明天), so ``parse_time`` would mark it ``pending`` and the caller
+    would route it into reverse mode. The orchestrator must therefore check
+    ``planMode`` **before** ``timeStatus`` — see `scripts/run_scenario.py`.
+    """
+    span = _parse_span_days(text)
+    if span is not None:
+        return {"planMode": "week", "spanDays": span,
+                "note": f"识别为多日排程意图：连续 {span} 天"}
+    if CROSS_STORE_RE.search(text):
+        return {"planMode": "cross_store", "spanDays": None,
+                "note": "识别为跨门店择优意图"}
+    return {"planMode": "single", "spanDays": None, "note": None}
+
+
+# --------------------------------------------------------------------------- #
 # Location & budget
 # --------------------------------------------------------------------------- #
 def parse_location(text: str) -> dict[str, Any]:
@@ -355,16 +417,32 @@ def parse_budget(text: str, now_people: int = 1) -> float | None:
 # Entry point
 # --------------------------------------------------------------------------- #
 def parse_request(text: str, now: datetime | None = None) -> dict[str, Any]:
-    """Parse an utterance into the constraint object consumed by `plan_meal.plan()`."""
+    """Parse an utterance into the constraint object consumed by `plan_meal.plan()`.
+
+    Beyond the constraint fields this also returns the **routing decision**
+    (``planMode`` / ``spanDays``) that tells the orchestrator which solver to
+    run. Callers that only need constraints can ignore it.
+    """
     now = now or datetime.now()
     warnings: list[str] = []
 
     t = parse_time(text, now)
-    if t.get("note"):
-        warnings.append(t["note"])
-
     people, w = parse_people(text)
     warnings.extend(w)
+    mode = parse_plan_mode(text)
+
+    # A multi-day request has no single时间点, so parse_time's "reverse mode"
+    # note would be actively misleading here. Replace it with the real intent.
+    if mode["planMode"] == "week":
+        status = "span"
+        warnings.append(f"多日排程：将按连续 {mode['spanDays']} 天分别求解并做跨天去重")
+    else:
+        status = t["status"]
+        if t.get("note"):
+            warnings.append(t["note"])
+
+    if mode["planMode"] == "cross_store" and status == "pending":
+        warnings.append("跨门店择优需要一个具体时间；未识别到时间，将先按营养目标反推最优时段")
 
     loc = parse_location(text)
     budget = parse_budget(text, len(people))
@@ -374,8 +452,10 @@ def parse_request(text: str, now: datetime | None = None) -> dict[str, Any]:
 
     return {
         "rawText": text,
-        "timeStatus": t["status"],
+        "timeStatus": status,
         "targetTime": t["targetTime"],
+        "planMode": mode["planMode"],
+        "spanDays": mode["spanDays"],
         "city": loc["city"],
         "keyword": loc["keyword"],
         "people": people,

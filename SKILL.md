@@ -29,6 +29,37 @@ Trigger this skill when the user wants to **order or reserve** McDonald's food (
 
 Do NOT use for: pure nutrition lookup without ordering intent; browsing the campaign calendar alone; 积分抽奖 or 麦麦商城 (out of scope); placing an order without explicit confirmation.
 
+## Routing
+
+`scripts/run_scenario.py` is the single entry point. It reads the routing
+decision from `scripts/parse_request.py` and dispatches to one solver:
+
+| `planMode` | `timeStatus` | Mode | Solver |
+|---|---|---|---|
+| `week` | `span` | multi-day | `plan_week.py` |
+| `cross_store` | `explicit` | cross-store | `compare_stores.py` |
+| `cross_store` | `pending` | reverse (degraded) | `recommend_slot.py` |
+| `single` | `pending` | reverse | `recommend_slot.py` |
+| `single` | `explicit` | forward | `plan_meal.py` / `plan_group()` |
+| any | any, with `--pin` | pinned (scenario D) | `candidate_pool` + `optimize_replacements.py` |
+
+**`planMode` is checked before `timeStatus`.** A multi-day request such as
+「接下来三天中午」carries no date word, so `timeStatus` comes back as `span`;
+routing on `timeStatus` would push it into reverse mode and solve for a single
+time the user never asked about. A route whose payload is missing degrades to
+`forward` with a warning instead of failing.
+
+Two capabilities are **auto-attached** rather than being separate commands,
+because that is exactly when they are needed:
+
+- **`time_guard`** — attached whenever the booking date is *today*. The API
+  never returns segments that already ended, so "breakfast is gone" is
+  invisible in today's payload alone.
+- **`diagnose`** — attached whenever **no plan fully meets the goals**. This
+  covers two shapes: zero plans, and — far more common — several plans all
+  sitting at 90%. The second used to render a card that looked healthy while
+  the user's goal was quietly unmet.
+
 ## Workflow
 
 ### Step 1 — Clarify and normalize the request
@@ -38,7 +69,11 @@ Run `scripts/parse_request.py --text "<utterance>" --now "<yyyy-MM-dd HH:MM>"` t
 **constraint object**:
 
 - `timeStatus`: `explicit` when a clock time was given; `pending` when the user asks
-  「约几点合适」or states goals without a time — **pending means reverse mode**
+  「约几点合适」or states goals without a time — **pending means reverse mode**;
+  `span` for multi-day requests, which have no single time at all
+- `planMode`: `single` / `week` (连续三天 / 这周) / `cross_store` (哪家店 / 换个店)
+  — this decides the solver, **before** `timeStatus`
+- `spanDays`: how many days to schedule, when `planMode == "week"`
 - `targetTime` (may be null)
 - `city` / `keyword` (store location)
 - `people`: list of `{name, goals}`, where goals are bounds such as `energy<=600`, `protein>=30`, `sodium<=800`
@@ -150,8 +185,11 @@ Card rules that must hold:
 
 ## Advanced capabilities
 
-Four extras that all hinge on the same time<->nutrition coupling. Reach for them
-only when the request calls for it — none of them is part of the default path.
+Four extras that all hinge on the same time<->nutrition coupling. Two are
+reachable from the orchestrator by **intent** (`week`, `cross_store`) and two
+are **auto-attached** when the situation calls for them (`time_guard` on
+today's date, `diagnose` when nothing fully meets the goals). None is part of
+the default path.
 
 ### A. Cross-store arbitration — `scripts/compare_stores.py`
 
@@ -170,6 +208,13 @@ Be honest in the output: same-block stores share ~95% of the menu, so under a
 loose goal the best dish is usually identical. The real value is *which stores
 are bookable at that time* and *which store still has the item*.
 
+When every store is blocked at the requested time, `nearest_bookable()` answers
+the question the user actually has — **the next moment any of them opens**.
+It reads the `reservationTimeOptions` already on the store list, so it costs
+**no extra MCP call**. Measured: at 22:00 both nearby stores are unavailable
+(朝外 is past closing, 东大桥 is inside the 21:45→22:14 switchover gap) and the
+card answers 改约到 22:14 即可.
+
 ### B. Multi-day scheduling — `scripts/plan_week.py`
 
 **Measurement refuted the obvious premise**: store 1950121 returns an *identical*
@@ -185,7 +230,14 @@ repeat **only** when a day would otherwise be empty, flagging it as `repeated`.
 
 ### C. Infeasibility diagnosis — `scripts/diagnose.py`
 
-"没有找到方案" is not an answer. When a goal set cannot be fully met, report:
+`needs_diagnosis()` fires on **"no plan fully achieves every goal"** — not
+merely on "the solver returned nothing". Zero plans is the rare case; the
+common one is a card listing three plans while the best sits at 90%, which
+looks healthy and tells the user nothing. Group mode is excluded: it names the
+diners it relaxed via `relaxedFor`, and a single-person relaxation figure would
+be meaningless there.
+
+When a goal set cannot be fully met, report:
 
 1. **what blocked it** — a counted breakdown (nutrition data missing, energy
    below the 300 kcal safety floor, energy above the ceiling, sodium severely
@@ -213,7 +265,7 @@ segment difference.
 
 ## Bundled resources
 
-- `scripts/parse_request.py` — utterance → constraint object (incl. reverse-mode detection).
+- `scripts/parse_request.py` — utterance → constraint object + `planMode` routing decision.
 - `scripts/resolve_store.py` — store time options → structured segments; gap detection.
 - `scripts/parse_nutrition.py` — nutrition text table → exact + fuzzy indexes.
 - `scripts/plan_meal.py` — combo decomposition, hard filter, scoring, ranking, group mode.
@@ -221,12 +273,15 @@ segment difference.
 - `scripts/optimize_replacements.py` — swap evaluation driven by `query-meal-detail`.
 - `scripts/apply_benefits.py` — coupon matching by `productCode` + campaign cross-hint.
 - `scripts/render_card.py` — Markdown plan card renderer.
-- `scripts/run_scenario.py` — end-to-end pipeline; accepts `--pin <meal>` for scenario D.
+- `scripts/run_scenario.py` — orchestrator: routes to one solver, auto-attaches
+  urgency and diagnosis; `--pin <meal>` for scenario D, `--json` for structured output.
 - `scripts/compare_stores.py` — cross-store arbitration + item availability.
 - `scripts/plan_week.py` — multi-day scheduling with cross-day de-duplication.
 - `scripts/diagnose.py` — infeasibility diagnosis + minimal-relaxation advice.
 - `scripts/time_guard.py` — segment deadline / urgency awareness.
 - `scripts/run_all_checks.py` — runs every verification suite; non-zero on failure.
+- `scripts/verify_integration.py` — pins the orchestrator wiring: routing
+  precedence, urgency/diagnosis auto-attach, pin matching, cross-store, multi-day.
 - `references/mcp_tools.md` — MCP tool cheat sheet and measured return fields.
 - `references/nutrition_reference.md` — dietary reference intakes used for per-meal targets.
 - `tests/fixtures/` — real MCP payloads, so every result is reproducible without a Token.

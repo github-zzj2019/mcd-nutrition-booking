@@ -94,6 +94,18 @@ def render_plan_card(plan: dict[str, Any]) -> str:
             if p.get("items"):
                 lines.append(f"  - 组成：{'、'.join(p['items'])}")
         lines.append("")
+
+        # A diner whose goal is unreachable here must be called out beside
+        # their own line, not buried in the closing "why this time" sentence.
+        # The per-person entry already prints "蛋白质 70%", but nothing there
+        # says whether that is a near miss or an impossibility in this slot.
+        if plan.get("relaxedFor"):
+            lines.append(
+                f"> ⚠️ **{'、'.join(plan['relaxedFor'])}** 的目标在该餐段内"
+                "没有任何组合能完全满足，已按相对最优分配；"
+                "要完全达标需放宽该目标或改约其他餐段。"
+            )
+            lines.append("")
     else:
         lines.append("**推荐组合**")
         lines.append("")

@@ -23,6 +23,8 @@ SCRIPTS = [
     ("杀手功能", "verify_features.py"),
     ("边界与降级", "verify_edge_cases.py"),
     ("进阶功能", "verify_advanced.py"),
+    # Last: it drives the orchestrator, which depends on every other module.
+    ("端到端集成", "verify_integration.py"),
 ]
 
 

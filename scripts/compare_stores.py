@@ -55,6 +55,48 @@ from resolve_store import match_segment  # noqa: E402
 from plan_meal import extract_meals, plan, score_plan  # noqa: E402
 
 
+def _to_minutes(hhmm: str) -> int | None:
+    """Convert 'HH:MM' to minutes past midnight; None when unparseable."""
+    try:
+        h, m = (hhmm or "").split(":")
+        return int(h) * 60 + int(m)
+    except (ValueError, AttributeError):
+        return None
+
+
+def nearest_bookable(store_menus: dict, hhmm: str) -> dict[str, Any] | None:
+    """Earliest segment start across all stores that is still ahead of ``hhmm``.
+
+    "Every nearby store is closed at 22:00" is accurate but not actionable —
+    the user asked for a time and deserves the next moment any of them can
+    take the booking. This is computed from the same ``reservationTimeOptions``
+    already on the store entries, so it costs **no extra MCP call**, and it is
+    exactly the kind of answer the store dimension exists to give: 东大桥 can
+    book 宵夜 from 22:14 while 朝外 simply has no such segment.
+    """
+    target = _to_minutes(hhmm)
+    if target is None:
+        return None
+
+    best: dict[str, Any] | None = None
+    for code, entry in (store_menus.get("stores") or {}).items():
+        for seg in entry.get("segments") or []:
+            start = _to_minutes(seg.get("start") or "")
+            if start is None or start <= target:
+                continue
+            if best is None or start < best["startMinutes"]:
+                best = {
+                    "startMinutes": start,
+                    "start": seg.get("start"),
+                    "end": seg.get("end"),
+                    "slotName": seg.get("name"),
+                    "storeCode": code,
+                    "storeName": entry.get("storeName", code),
+                    "distance": entry.get("distance"),
+                }
+    return best
+
+
 def _item_matches(item_name: str, name: str) -> bool:
     """Decide whether a menu entry ``name`` is the item the user asked for.
 
@@ -203,7 +245,16 @@ def compare_stores(store_menus: dict, nutrition_index: dict, fuzzy_index: dict,
         else:
             result["tradeoff"] = "最优门店同时也是最近的门店，无需权衡。"
     elif blocked:
-        result["tradeoff"] = "所有附近门店都无法在该时间满足该目标。"
+        nxt = nearest_bookable(store_menus, hhmm)
+        if nxt:
+            result["nearestBookable"] = nxt
+            result["tradeoff"] = (
+                f"所有 {len(blocked)} 家门店在 {hhmm} 都不可约；最近的可约时间是 "
+                f"{nxt['start']}（{nxt['slotName']}，{nxt['storeName']}，"
+                f"{nxt['distance']} m）。"
+            )
+        else:
+            result["tradeoff"] = "所有附近门店都无法在该时间满足该目标，且当天已无更晚的餐段。"
 
     if blocked and feasible:
         names = "、".join(b["storeName"] for b in blocked[:2])
@@ -246,6 +297,17 @@ def render_comparison(result: dict[str, Any]) -> str:
     if result.get("tradeoff"):
         lines.append(f"**权衡**：{result['tradeoff']}")
         lines.append("")
+
+    nxt = result.get("nearestBookable")
+    if nxt:
+        lines.append(
+            f"> ⏭ 改约到 **{nxt['start']}** 即可：{nxt['storeName']}"
+            f"（{nxt['distance']} m）的{nxt['slotName']}餐段 "
+            f"{nxt['start']}–{nxt['end']}。该结论直接来自门店预约时段，"
+            "不需要额外查询。"
+        )
+        lines.append("")
+
     if result.get("bookabilityNote"):
         lines.append(f"> 📌 {result['bookabilityNote']}")
         lines.append("")
