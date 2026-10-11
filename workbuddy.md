@@ -1,4 +1,5 @@
 # WorkBuddy 对话上下文（参赛证明）
+对话内容分享链接：https://www.workbuddy.link/p/9GTyOvnVwqjFuHdDed0Ixc?ext2=browser_icon
 
 > 本文件对应官方活动规则 `activityGuidelines.md` 对 `workbuddy.md` 的要求：
 > 「如参与 WorkBuddy 专项奖励的需提交本文件，**WorkBuddy 对话上下文，用于联动活动**」。
