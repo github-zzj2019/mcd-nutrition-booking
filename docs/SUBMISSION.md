@@ -1,6 +1,7 @@
 # 报名提交（D14）
 
-报名入口：<https://github.com/M-China-Official/mcd-developer-innovation-challenge/issues>
+报名入口：<https://github.com/M-China/mcd-developer-innovation-challenge/issues>
+（官方仓库已迁移：原 `M-China-Official/...` → 现 `M-China/...`，旧地址会 301 重定向）
 
 ---
 
@@ -50,7 +51,36 @@ Issue 正文：
 
 ---
 
-## 三、提交前的自检清单
+## 三、两种提交方式
+
+### 方式 A：手动提交（推荐，无需任何凭据）
+
+1. 打开 <https://github.com/M-China/mcd-developer-innovation-challenge/issues>
+2. 点 **New issue**，把上面「Issue 标题」粘进标题框，「Issue 正文」粘进正文框
+3. 点 **Submit new issue**
+4. 等几秒刷新页面——官方机器人 `M-China-Official` 会回复：
+
+   > 您的作品已成功参赛，您可以通过官方项目的排行榜.md查看排名
+
+   看到这条即为**报名成功**；若回复的是失败原因，改完可直接再开一个 Issue 重提。
+
+### 方式 B：用 GitHub Token 自动提交
+
+**Token 必须满足两个条件，缺一不可**（这是本次实际踩到的坑）：
+
+| 配置项 | 要求 | 踩坑记录 |
+|---|---|---|
+| Repository permissions → **Issues** | **Read and write** | ⚠️ 只勾了 `Contents` 或 `Metadata` 的话，建 Issue 会返回 `403 Resource not accessible by personal access token`，**连自己名下的仓库也建不了** |
+| Repository access | **All repositories**（至少包含 Public） | Fine-grained PAT 默认限定在「Only select repositories」，够不到 `M-China` 组织下的仓库 |
+
+生成路径：<https://github.com/settings/personal-access-tokens> → **Fine-grained token** → 按上表勾两项 → 生成后**立即使用，用完 Revoke**。
+
+> 官方仓库已从 `M-China-Official/...` 迁移到 **`M-China/mcd-developer-innovation-challenge`**，
+> 旧地址会自动 301 重定向，但 API 提交时请直接用新地址。
+
+---
+
+## 四、提交前的自检清单
 
 | 检查项 | 状态 | 说明 |
 |---|---|---|
@@ -66,9 +96,12 @@ Issue 正文：
 
 ---
 
-## 四、提交后的预期
+## 五、提交后的预期
 
-- **报名成功**：系统会在该 Issue 下回复成功通知。
+- **报名成功**：官方机器人 `M-China-Official` 会在该 Issue 下回复：
+  > 您的作品已成功参赛，您可以通过官方项目的排行榜.md查看排名
+
+  （已核对近期他人 Issue #415 / #421 / #422 的实际回复，措辞一致，可据此判定成功。）
 - **报名失败**：系统同样会回复失败原因；按提示修改后可**重新提交 Issue**。
 - 报名成功后，官方定时采集**公开 Star 数据**，Star > 0 才进入排行榜（`RANKING.md`）。
 - Star 定格时间：**2026-10-26 00:00**。提交收货信息截止：**2026-11-14**。
