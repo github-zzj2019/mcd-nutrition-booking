@@ -1,0 +1,27 @@
+{
+  "_note": "Trimmed subset of the REAL query-meal-detail menu return for store 1950121, reservationDate=2026-10-12 12:00 (lunch). Contains representative 套餐(combos) and 单品(singles) with real codes/names/prices.",
+  "success": true,
+  "code": 200,
+  "message": "请求成功",
+  "data": {
+    "meals": {
+      "9900005466": {"name": "巨无霸三件套", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_9900005466_320.png", "currentPrice": "37", "originalPrice": "50.5", "canWithOrder": false},
+      "9900005456": {"name": "麦辣鸡腿汉堡三件套", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_9900005456_320.png", "currentPrice": "33.5", "originalPrice": "47", "canWithOrder": false},
+      "9900005462": {"name": "板烧鸡腿堡三件套", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_9900005462_320.png", "currentPrice": "34.5", "originalPrice": "48", "canWithOrder": false},
+      "9900005460": {"name": "麦香鱼套餐", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_G504968_320.png", "currentPrice": "34", "originalPrice": "47.5", "canWithOrder": false},
+      "9900005453": {"name": "麦香鸡套餐", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260824/product/MS_G504967_320.png", "currentPrice": "28", "originalPrice": "41.5", "canWithOrder": false},
+      "1100": {"name": "巨无霸", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1100_320.png", "currentPrice": "26", "originalPrice": "26", "canWithOrder": false},
+      "1440": {"name": "麦辣鸡腿汉堡", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260325/product/MS_1440_320.png", "currentPrice": "22.5", "originalPrice": "22.5", "canWithOrder": false},
+      "1406": {"name": "板烧鸡腿堡", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20241008/product/MS_1406_320.png", "currentPrice": "23.5", "originalPrice": "23.5", "canWithOrder": false},
+      "1600": {"name": "麦香鱼", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260101/product/MS_1600_320.png", "currentPrice": "23", "originalPrice": "23", "canWithOrder": false},
+      "1450": {"name": "麦香鸡", "image": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_1450_320.png", "currentPrice": "17", "originalPrice": "17", "canWithOrder": false},
+      "1120": {"name": "双层吉士汉堡", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1120_320.png", "currentPrice": "23", "originalPrice": "23", "canWithOrder": false},
+      "1106": {"name": "培根蔬萃双层牛堡", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_1106_320.png", "currentPrice": "25", "originalPrice": "25", "canWithOrder": false},
+      "4648": {"name": "不素之霸双层牛堡", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20260309/product/MS_4648_320.png", "currentPrice": "27", "originalPrice": "27", "canWithOrder": false},
+      "4810": {"name": "薯条", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20250523/product/MS_G4810_320.png", "currentPrice": "14.5", "originalPrice": "14.5", "canWithOrder": false},
+      "4437": {"name": "玉米杯", "image": "https://menu-img.mcd.cn/pcm/prod/menu/20250506/product/MS_G4437_320.png", "currentPrice": "13", "originalPrice": "13", "canWithOrder": false},
+      "9900008751": {"name": "可乐", "image": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_9900008751_320.gif", "currentPrice": "9.5", "originalPrice": "9.5", "canWithOrder": false},
+      "3010": {"name": "雪碧", "image": "https://menu-img.mcd.cn/pcm/prod/menu/ProductPool/product/MS_G3010_320.png", "currentPrice": "9.5", "originalPrice": "9.5", "canWithOrder": false}
+    }
+  }
+}

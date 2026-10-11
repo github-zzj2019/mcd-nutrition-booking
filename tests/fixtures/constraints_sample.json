@@ -1,0 +1,20 @@
+{
+  "_note": "Scenario A sample: tomorrow (2026-10-12) at 12:00, one person, keep the whole meal under 600 kcal and sodium under 800 mg. Store resolved from query-nearby-stores (Chaowai, Beijing).",
+  "targetTime": "2026-10-12 12:00",
+  "city": "北京",
+  "keyword": "朝阳区",
+  "storeCode": "1950121",
+  "storeName": "麦当劳北京朝外餐厅",
+  "slotName": "午餐",
+  "slotRange": "(10:44至14:15)",
+  "people": [
+    {
+      "name": "我",
+      "goals": {
+        "energy": {"op": "max", "value": 600},
+        "sodium": {"op": "max", "value": 800}
+      }
+    }
+  ],
+  "budget": null
+}

@@ -1,0 +1,34 @@
+{
+  "_note": "REAL campaign-calendar return for specifiedDate=2026-10-12, structured by the agent from the MCP text response. The headline finding is the daily-count swing: 2026-10-11 carries 12 campaigns, 2026-10-12 only 2, 2026-10-13 only 1 — the day you book genuinely changes which campaigns you can catch. That is the measured basis for the 'campaign x reservation slot' cross-hint.",
+  "queriedAt": "2026-10-11 12:20:08",
+  "dailyCount": {"2026-10-11": 12, "2026-10-12": 2, "2026-10-13": 1},
+  "campaigns": [
+    {
+      "title": "超值9.9元早餐两件套陪你开工啦",
+      "window": "10月8日至10月21日",
+      "startDate": "2026-10-08",
+      "endDate": "2026-10-21",
+      "launchTime": null,
+      "slots": ["早餐"],
+      "days": ["2026-10-11", "2026-10-12"]
+    },
+    {
+      "title": "麦当劳 X PEACEMINUSONE（GD同款联名复古棒球帽）",
+      "window": "10月8日10:45开售",
+      "startDate": "2026-10-08",
+      "endDate": null,
+      "launchTime": "10:45",
+      "slots": [],
+      "days": ["2026-10-11", "2026-10-13"]
+    },
+    {
+      "title": "韩式风味蘸酱上新",
+      "window": "10月8日 10:30起正式开售",
+      "startDate": "2026-10-08",
+      "endDate": null,
+      "launchTime": "10:30",
+      "slots": [],
+      "days": ["2026-10-11"]
+    }
+  ]
+}

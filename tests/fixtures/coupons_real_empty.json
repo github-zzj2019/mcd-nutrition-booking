@@ -1,0 +1,9 @@
+{
+  "_note": "REAL query-store-coupons return for store 1950121, orderType=1, beType=1, reservationDate='2026-10-12 12:00'. The demo account holds no coupons, so data is empty. Kept verbatim to document this real-world edge case (the skill must degrade gracefully here).",
+  "success": true,
+  "code": 200,
+  "message": "请求成功",
+  "datetime": "2026-10-11 12:19:55",
+  "traceId": "fe950719cc3758c741eef740a93192e5",
+  "data": []
+}

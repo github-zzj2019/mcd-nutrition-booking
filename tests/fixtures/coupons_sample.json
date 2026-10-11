@@ -1,0 +1,29 @@
+{
+  "_note": "SHAPE-ACCURATE SAMPLE, not a real account return. The demo account's query-store-coupons came back empty (see coupons_real_empty.json), so this fixture reproduces the documented response schema field-for-field: title / couponId / couponCode / tradeDateTime / products[].productName|productCode. productCode values are REAL codes taken from query-meals, so the plan<->coupon matcher is exercised against the same code space used by the menu. The third entry is deliberately outside its validity window to test date filtering.",
+  "success": true,
+  "code": 200,
+  "message": "请求成功",
+  "data": [
+    {
+      "title": "麦香鸡 免费加量券",
+      "couponId": "C1001",
+      "couponCode": "CC1001",
+      "tradeDateTime": "2026-10-08 至 2026-10-21",
+      "products": [{"productName": "麦香鸡", "productCode": "1450"}]
+    },
+    {
+      "title": "巨无霸三件套 立减券",
+      "couponId": "C1002",
+      "couponCode": "CC1002",
+      "tradeDateTime": "2026-10-01 至 2026-10-31",
+      "products": [{"productName": "巨无霸三件套", "productCode": "9900005466"}]
+    },
+    {
+      "title": "玉米杯 第二份半价（已过期）",
+      "couponId": "C1003",
+      "couponCode": "CC1003",
+      "tradeDateTime": "2026-09-01 至 2026-09-30",
+      "products": [{"productName": "玉米杯", "productCode": "4437"}]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "_note": "REAL query-meals returns for store 1950121, trimmed to representative subsets. Slots pulled with reservationDate = 2026-10-12 08:00 (breakfast) / 12:00 (lunch) / 15:30 (afternoon tea). Slot ranges come from query-nearby-stores reservationTimeOptions. 午餐/下午茶/夜市 share the same all-day (正餐) menu pool; only 早餐 differs — this is the measured basis of the two-way time<->nutrition constraint.",
+  "storeCode": "1950121",
+  "storeName": "麦当劳北京朝外餐厅",
+  "date": "2026-10-12",
+  "slots": {
+    "早餐": {
+      "slotRange": "(06:14至10:15)",
+      "suggestTime": "2026-10-12 06:14",
+      "queryTime": "2026-10-12 08:00",
+      "menu": {
+        "success": true,
+        "code": 200,
+        "data": {
+          "meals": {
+            "5022": {"name": "猪柳蛋麦满分", "currentPrice": "18", "originalPrice": "18"},
+            "5024": {"name": "猪柳麦满分", "currentPrice": "14", "originalPrice": "14"},
+            "520830": {"name": "双层猪柳蛋麦满分", "currentPrice": "21", "originalPrice": "21"},
+            "1254": {"name": "火腿扒麦满分", "currentPrice": "11", "originalPrice": "11"},
+            "5889": {"name": "大脆鸡扒麦满分", "currentPrice": "11.5", "originalPrice": "11.5"},
+            "6800": {"name": "原味板烧鸡腿麦满分", "currentPrice": "15", "originalPrice": "15"},
+            "4989": {"name": "双层原味板烧鸡腿麦满分", "currentPrice": "18.5", "originalPrice": "18.5"},
+            "5888": {"name": "吉士蛋麦满分", "currentPrice": "10", "originalPrice": "10"},
+            "502773": {"name": "猪柳炒双蛋堡", "currentPrice": "18", "originalPrice": "18"},
+            "514700": {"name": "原味板烧鸡腿炒双蛋堡", "currentPrice": "18", "originalPrice": "18"},
+            "513112": {"name": "火腿扒早安营养卷", "currentPrice": "16.5", "originalPrice": "16.5"},
+            "513113": {"name": "图林根香肠早安营养卷", "currentPrice": "16", "originalPrice": "16"},
+            "4825": {"name": "脆薯饼", "currentPrice": "8.5", "originalPrice": "8.5"},
+            "2631": {"name": "脆香油条", "currentPrice": "8.5", "originalPrice": "8.5"},
+            "4437": {"name": "玉米杯", "currentPrice": "13", "originalPrice": "13"},
+            "9900003458": {"name": "猪柳蛋麦满分套餐", "currentPrice": "15.3", "originalPrice": "25.5", "discountType": "随单购早餐卡优惠"}
+          }
+        }
+      }
+    },
+    "午餐": {
+      "slotRange": "(10:44至14:15)",
+      "suggestTime": "2026-10-12 10:44",
+      "queryTime": "2026-10-12 12:00",
+      "menu": {
+        "success": true,
+        "code": 200,
+        "data": {
+          "meals": {
+            "9900005466": {"name": "巨无霸三件套", "currentPrice": "37", "originalPrice": "50.5"},
+            "9900005456": {"name": "麦辣鸡腿汉堡三件套", "currentPrice": "33.5", "originalPrice": "47"},
+            "9900005462": {"name": "板烧鸡腿堡三件套", "currentPrice": "34.5", "originalPrice": "48"},
+            "9900005460": {"name": "麦香鱼套餐", "currentPrice": "34", "originalPrice": "47.5"},
+            "9900005453": {"name": "麦香鸡套餐", "currentPrice": "28", "originalPrice": "41.5"},
+            "1100": {"name": "巨无霸", "currentPrice": "26", "originalPrice": "26"},
+            "1440": {"name": "麦辣鸡腿汉堡", "currentPrice": "22.5", "originalPrice": "22.5"},
+            "1406": {"name": "板烧鸡腿堡", "currentPrice": "23.5", "originalPrice": "23.5"},
+            "1600": {"name": "麦香鱼", "currentPrice": "23", "originalPrice": "23"},
+            "1450": {"name": "麦香鸡", "currentPrice": "17", "originalPrice": "17"},
+            "1120": {"name": "双层吉士汉堡", "currentPrice": "23", "originalPrice": "23"},
+            "1106": {"name": "培根蔬萃双层牛堡", "currentPrice": "25", "originalPrice": "25"},
+            "4648": {"name": "不素之霸双层牛堡", "currentPrice": "27", "originalPrice": "27"},
+            "9900003586": {"name": "双层深海鳕鱼堡", "currentPrice": "25", "originalPrice": "25"},
+            "4810": {"name": "薯条", "currentPrice": "14.5", "originalPrice": "14.5"},
+            "4437": {"name": "玉米杯", "currentPrice": "13", "originalPrice": "13"},
+            "9900008751": {"name": "可乐", "currentPrice": "9.5", "originalPrice": "9.5"},
+            "3010": {"name": "雪碧", "currentPrice": "9.5", "originalPrice": "9.5"}
+          }
+        }
+      }
+    },
+    "下午茶": {
+      "slotRange": "(14:44至16:45)",
+      "suggestTime": "2026-10-12 14:44",
+      "queryTime": "2026-10-12 15:30",
+      "menu": {
+        "success": true,
+        "code": 200,
+        "data": {
+          "meals": {
+            "1100": {"name": "巨无霸", "currentPrice": "26", "originalPrice": "26"},
+            "1440": {"name": "麦辣鸡腿汉堡", "currentPrice": "22.5", "originalPrice": "22.5"},
+            "1406": {"name": "板烧鸡腿堡", "currentPrice": "23.5", "originalPrice": "23.5"},
+            "1600": {"name": "麦香鱼", "currentPrice": "23", "originalPrice": "23"},
+            "1450": {"name": "麦香鸡", "currentPrice": "17", "originalPrice": "17"},
+            "1120": {"name": "双层吉士汉堡", "currentPrice": "23", "originalPrice": "23"},
+            "1106": {"name": "培根蔬萃双层牛堡", "currentPrice": "25", "originalPrice": "25"},
+            "4648": {"name": "不素之霸双层牛堡", "currentPrice": "27", "originalPrice": "27"},
+            "9900003586": {"name": "双层深海鳕鱼堡", "currentPrice": "25", "originalPrice": "25"},
+            "521316": {"name": "高达吉士双牛堡", "currentPrice": "22.5", "originalPrice": "22.5"},
+            "521816": {"name": "酥酥多笋卷", "currentPrice": "21", "originalPrice": "21"},
+            "6102": {"name": "苹果片", "currentPrice": "7", "originalPrice": "7"},
+            "4437": {"name": "玉米杯", "currentPrice": "13", "originalPrice": "13"},
+            "9900008751": {"name": "可乐", "currentPrice": "9.5", "originalPrice": "9.5"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "success": true,
+  "code": 200,
+  "message": "请求成功",
+  "data": [
+    {
+      "storeCode": "1950121",
+      "storeName": "麦当劳北京朝外餐厅",
+      "address": "朝外大街昆泰国际中心2728商铺",
+      "distance": 226,
+      "businessStatus": true,
+      "businessStartTime": "06:00",
+      "businessEndTime": "22:00",
+      "longitude": 0.0,
+      "latitude": 0.0,
+      "reservation": true,
+      "reservationTimeOptions": [
+        {
+          "date": "2026-10-11",
+          "today": true,
+          "reservationOptionText": "午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+        },
+        {
+          "date": "2026-10-12",
+          "today": false,
+          "reservationOptionText": "早餐(06:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+        }
+      ]
+    },
+    {
+      "storeCode": "1950947",
+      "storeName": "麦当劳北京日坛北路餐厅",
+      "address": "日坛北路19号楼1层157",
+      "distance": 385,
+      "businessStatus": true,
+      "businessStartTime": "07:00",
+      "businessEndTime": "22:00",
+      "longitude": 0.0,
+      "latitude": 0.0,
+      "reservation": true,
+      "reservationTimeOptions": [
+        {
+          "date": "2026-10-11",
+          "today": true,
+          "reservationOptionText": "午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+        },
+        {
+          "date": "2026-10-12",
+          "today": false,
+          "reservationOptionText": "早餐(07:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+        }
+      ]
+    },
+    {
+      "storeCode": "1950006",
+      "storeName": "麦当劳北京东大桥餐厅",
+      "address": "工体东路13号",
+      "distance": 462,
+      "businessStatus": true,
+      "businessStartTime": "06:00",
+      "businessEndTime": "23:00",
+      "longitude": 0.0,
+      "latitude": 0.0,
+      "reservation": true,
+      "reservationTimeOptions": [
+        {
+          "date": "2026-10-11",
+          "today": true,
+          "reservationOptionText": "午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)，宵夜(22:14至22:46)"
+        },
+        {
+          "date": "2026-10-12",
+          "today": false,
+          "reservationOptionText": "早餐(06:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)，宵夜(22:14至22:46)"
+        }
+      ]
+    },
+    {
+      "storeCode": "1950927",
+      "storeName": "麦当劳北京朝外西街餐厅",
+      "address": "朝外西街3号",
+      "distance": 661,
+      "businessStatus": true,
+      "businessStartTime": "07:00",
+      "businessEndTime": "22:00",
+      "longitude": 0.0,
+      "latitude": 0.0,
+      "reservation": true,
+      "reservationTimeOptions": [
+        {
+          "date": "2026-10-11",
+          "today": true,
+          "reservationOptionText": "午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+        },
+        {
+          "date": "2026-10-12",
+          "today": false,
+          "reservationOptionText": "早餐(07:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)"
+        }
+      ]
+    },
+    {
+      "storeCode": "1951027",
+      "storeName": "麦当劳北京吉市口东路（佳汇中心）餐厅",
+      "address": "吉庆里6号楼一层101内02",
+      "distance": 810,
+      "businessStatus": true,
+      "businessStartTime": "07:00",
+      "businessEndTime": "23:00",
+      "longitude": 0.0,
+      "latitude": 0.0,
+      "reservation": true,
+      "reservationTimeOptions": [
+        {
+          "date": "2026-10-11",
+          "today": true,
+      "reservationOptionText": "午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)，宵夜(22:14至22:46)"
+        },
+        {
+          "date": "2026-10-12",
+          "today": false,
+          "reservationOptionText": "早餐(07:14至10:15)，午餐(10:44至14:15)，下午茶(14:44至16:45)，夜市(17:14至21:45)，宵夜(22:14至22:46)"
+        }
+      ]
+    }
+  ]
+}

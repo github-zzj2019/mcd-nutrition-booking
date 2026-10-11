@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 环境 / 虚拟环境
+.venv/
+venv/
+env/
+
+# 本地密钥与真实配置（仓库只提交 mcp-config.example.json）
+.env
+*.env
+mcp-config.json
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

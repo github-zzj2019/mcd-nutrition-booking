@@ -1,0 +1,21 @@
+{
+  "_note": "Scenario B (reverse mode): the user states nutrition goals but NOT a time — '我想吃够25g蛋白又不想超过600 kcal，钠也别太猛，帮我看看明天约几点合适'. timeStatus=pending triggers recommend_slot.py.",
+  "rawText": "我想吃够25g蛋白又不想超过600 kcal，钠也别太猛，帮我看看明天约几点合适",
+  "timeStatus": "pending",
+  "targetTime": null,
+  "city": "北京",
+  "keyword": "朝阳区",
+  "storeCode": "1950121",
+  "storeName": "麦当劳北京朝外餐厅",
+  "people": [
+    {
+      "name": "我",
+      "goals": {
+        "energy": {"op": "max", "value": 600},
+        "protein": {"op": "min", "value": 25},
+        "sodium": {"op": "max", "value": 800}
+      }
+    }
+  ],
+  "budget": null
+}
